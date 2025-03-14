@@ -1,11 +1,12 @@
-PHP Docker Development Environment
+# PHP Docker Development Environment
 Un environnement de développement PHP moderne avec Apache et PHP-FPM, optimisé pour le développement sous WSL2 et intégrable avec VS Code.
 
-Prérequis
-WSL2 (Windows Subsystem for Linux 2)
-Docker Desktop pour Windows configuré pour utiliser WSL2
-VS Code avec l'extension Remote Development (recommandé)
-Structure du projet
+# Prérequis
+- WSL2 (Windows Subsystem for Linux 2)
+- Docker Desktop pour Windows configuré pour utiliser WSL2
+- VS Code avec l'extension Remote Development (recommandé)
+# Structure du projet
+```
 dockerphp/
 ├── .devcontainer/             # Configuration pour VS Code Remote Development
 │   ├── devcontainer.json      # Configuration de l'environnement de développement
@@ -19,48 +20,53 @@ dockerphp/
 │   └── index.php              # Point d'entrée de l'application
 ├── .bash_history              # Historique des commandes (persistant)
 └── docker-compose.yml         # Configuration des services Docker
-
-Installation et démarrage
-Clonez ce dépôt :
-
+```
+# Installation et démarrage
+## Clonez ce dépôt :
+```sh
 git clone https://github.com/username/dockerphp.git
+
 cd dockerphp
+```
+## Démarrez les conteneurs :
 
-Démarrez les conteneurs :
-
+```sh
 docker compose up -d
+```
 
 Vérifiez que tout fonctionne correctement en accédant à http://localhost dans votre navigateur
 
-Développement avec VS Code
-Option 1 : Développement à distance dans le conteneur
+# Développement avec VS Code
+- Option 1 : Développement à distance dans le conteneur
 Ouvrez le dossier du projet dans VS Code
 Cliquez sur l'icône verte dans le coin inférieur gauche
 Sélectionnez "Reopen in Container"
 VS Code redémarre et se connecte à l'intérieur du conteneur PHP
-Option 2 : Développement local avec le volume monté
+
+- Option 2 : Développement local avec le volume monté
 Ouvrez le dossier src dans VS Code
 Modifiez les fichiers - ils seront automatiquement synchronisés avec le conteneur
 Accédez à http://localhost pour voir les changements
 Commandes utiles
-Gestion des conteneurs
-# Démarrer les conteneurs
+
+# Gestion des conteneurs
+## Démarrer les conteneurs
 docker compose up -d
 
-# Arrêter les conteneurs
+## Arrêter les conteneurs
 docker compose down
 
-# Reconstruire les images (après modification des Dockerfiles)
+## Reconstruire les images (après modification des Dockerfiles)
 docker compose build --no-cache
 
 Accès aux conteneurs
-# Ouvrir un terminal dans le conteneur PHP
+## Ouvrir un terminal dans le conteneur PHP
 docker compose exec php bash
 
-# Exécuter une commande PHP
+## Exécuter une commande PHP
 docker compose exec php php -v
 
-# Vérifier les logs
+## Vérifier les logs
 docker compose logs -f
 
 Développement PHP
@@ -123,5 +129,3 @@ Configuration modulaire facile à personnaliser
 Optimisé pour WSL2 et Docker Desktop
 License
 MIT
-
-Pour toute question ou amélioration, n'hésitez pas à ouvrir une issue sur GitHub.
