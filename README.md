@@ -28,7 +28,7 @@ dockerphp/
 git clone https://github.com/username/dockerphp.git
 ```
 ```sh 
-cd dockerphp
+cd docker_php
 ```
 ## Démarrez les conteneurs :
 ```sh
