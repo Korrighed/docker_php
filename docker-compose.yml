@@ -1,0 +1,32 @@
+# docker-compose.yml
+networks:
+  reseauapp:
+    driver: bridge
+
+volumes:
+  php_data:  # Pour la persistance des données de l'utilisateur
+
+services:
+  php:
+    build:
+      context: ./php
+    volumes:
+      - ./src:/var/www/html
+      - php_data:/root  # Pour les configurations de l'utilisateur
+      - ./.bash_history:/root/.bash_history  # Historique des commandes
+    networks:
+      - reseauapp
+    tty: true
+    stdin_open: true
+
+  apache:
+    build:
+      context: ./apache2
+    ports:
+      - "80:80"
+    volumes:
+      - ./src:/var/www/html  # Même montage que dans le conteneur PHP
+    networks:
+      - reseauapp
+    depends_on:
+      - php
