@@ -4,7 +4,8 @@ Un environnement de développement PHP moderne avec Apache et PHP-FPM, optimisé
 # Prérequis
 - WSL2 (Windows Subsystem for Linux 2)
 - Docker Desktop pour Windows configuré pour utiliser WSL2
-- VS Code avec l'extension Remote Development (recommandé)
+- VS Code avec l'extension Remote Development obligatoire
+
 # Structure du projet
 ```
 dockerphp/
@@ -25,51 +26,44 @@ dockerphp/
 ## Clonez ce dépôt :
 ```sh
 git clone https://github.com/username/dockerphp.git
-
+```
+```sh 
 cd dockerphp
 ```
 ## Démarrez les conteneurs :
-
 ```sh
 docker compose up -d
 ```
-
-Vérifiez que tout fonctionne correctement en accédant à http://localhost dans votre navigateur
-
-# Développement avec VS Code
-- Option 1 : Développement à distance dans le conteneur
-Ouvrez le dossier du projet dans VS Code
-Cliquez sur l'icône verte dans le coin inférieur gauche
-Sélectionnez "Reopen in Container"
-VS Code redémarre et se connecte à l'intérieur du conteneur PHP
-
-- Option 2 : Développement local avec le volume monté
-Ouvrez le dossier src dans VS Code
-Modifiez les fichiers - ils seront automatiquement synchronisés avec le conteneur
-Accédez à http://localhost pour voir les changements
-Commandes utiles
-
 # Gestion des conteneurs
-## Démarrer les conteneurs
-docker compose up -d
-
-## Arrêter les conteneurs
-docker compose down
-
-## Reconstruire les images (après modification des Dockerfiles)
+## monter le conteneur
+```sh 
 docker compose build --no-cache
+```
+Cette opération prends naturellement du temps. 
+Vous téléchargez un système d'exploitation. 
 
-Accès aux conteneurs
-## Ouvrir un terminal dans le conteneur PHP
-docker compose exec php bash
+## démarre le conteneur 
+```sh
+docker compose up -d
+```
+## Arrêter les conteneurs
+```sh
+docker compose down
+```
 
-## Exécuter une commande PHP
-docker compose exec php php -v
+# Vérifier l'intallation 
+- Ouvrir un terminal dans le conteneur PHP
+```sh 
+docker compose exec -it php bash
+```
+- Vérifier l'installation de php
+```sh 
+php -v
 
-## Vérifier les logs
-docker compose logs -f
+exit
+```
 
-Développement PHP
+# Développement PHP
 Le répertoire src/ est monté à la fois dans le conteneur Apache et PHP-FPM, ce qui signifie que:
 
 Tous les fichiers que vous créez ou modifiez dans src/ sont automatiquement disponibles pour le serveur web
@@ -77,55 +71,47 @@ Vous pouvez modifier ces fichiers directement depuis l'hôte WSL2 ou depuis VS C
 Aucun redémarrage de conteneur n'est nécessaire après modification des fichiers PHP
 Exemple:
 
-# Créer un fichier phpinfo
-echo '<?php phpinfo();' > src/info.php
+## Créer un fichier phpinfo
+```sh 
+sudo nano info.php
+```
+Ajouter la liste de dépendance dans le fichier à la racine: 
 
-# Accéder à http://localhost/info.php pour voir le résultat
+```info.php
+<?php phpinfo();
+```
+Accéder à http://localhost/info.php pour voir le résultat
 
-Personnalisation
-Ajout d'extensions PHP
-Modifiez le fichier php/Dockerfile et ajoutez les extensions requises :
+## VScode 
 
-# Exemple: ajouter l'extension intl
-RUN apt-get update && apt-get install -y libicu-dev \
-    && docker-php-ext-install intl
+Avec l'extension remote dev installer. 
+En bas à gauche sur l'icône '><' => attache to running container =>  docker_php-php-1. 
+Une nouvelle instance de wsl vas s'ouvrir dans le conteneur. 
+Cette instance va s'ouvrir dans le repertoire home de la distribution linux du conteneur. 
+Pour se diriger vers le répertoire servi.
 
-Configuration d'Apache
-Modifiez le fichier apache2/apache.conf pour ajuster les paramètres du serveur web.
+```sh
+cd /var/www/html/
+```
 
-Variables d'environnement
-Ajoutez des variables d'environnement dans docker-compose.yml :
+```sh
+code . 
+```
 
-services:
-  php:
-    # Configuration existante...
-    environment:
-      - APP_ENV=development
-      - DB_HOST=mysql
+Une nouvelle fenêtre vs code s'ouvre dans le répertoire distribué par apache2. 
 
-Dépannage
-Problèmes de permission
-Si vous rencontrez des problèmes de permission dans les fichiers créés à l'intérieur du conteneur :
+A vous de créer de nouveaux repertoires qui seront servis à l'adresse. 
 
-# Dans le répertoire du projet
-sudo chown -R $(id -u):$(id -g) src/
+http://localhost/nomDuNouveauRepertoire
 
-Ports déjà utilisés
-Si le port 80 est déjà utilisé sur votre machine :
-
-# Dans docker-compose.yml
-services:
-  apache:
-    # Configuration existante...
-    ports:
-      - "8080:80"  # Utilisez le port 8080 à la place
-
-Fonctionnalités
+# Fonctionnalités
 Apache 2.4 avec support PHP via proxy FastCGI
 PHP 8.2 avec FPM pour des performances optimales
 Volumes persistants pour le code source et la configuration
 Intégration VS Code via l'extension Remote Development
 Configuration modulaire facile à personnaliser
 Optimisé pour WSL2 et Docker Desktop
-License
+
+# License
 MIT
+
